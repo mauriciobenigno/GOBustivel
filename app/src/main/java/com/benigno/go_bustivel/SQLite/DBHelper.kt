@@ -1,5 +1,6 @@
 package com.benigno.go_bustivel.SQLite
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -17,8 +18,8 @@ class DBHelper(context: Context):SQLiteOpenHelper(context, DATABASE_NAME, null, 
         private val ID_POSTO = "id"
         private val RAZAOSOCIAL_POSTO = "RazaoSocial"
         private val NOMEFANTASIA_POSTO = "NomeFantasia"
-        private val MUNICIPIO_POSTO = "RazaoSocial"
-        private val BAIRRO_POSTO = "RazaoSocial"
+        private val MUNICIPIO_POSTO = "Cidade"
+        private val BAIRRO_POSTO = "Bairro"
         // Tipo 1 - Diesel comum
         private val VLRMINTP1_POSTO = "VlrMinTP1"
         private val VLRMEDTP1_POSTO = "VlrMedTP1"
@@ -43,7 +44,7 @@ class DBHelper(context: Context):SQLiteOpenHelper(context, DATABASE_NAME, null, 
 
     override fun onCreate(db: SQLiteDatabase?)
     {
-        val CREATE_TABLE_QUERY: String = ("CREATE TABLE $NOME_TABELA ($ID_POSTO INTEGER PRIMARY KEY, $RAZAOSOCIAL_POSTO +  TEXT, $NOMEFANTASIA_POSTO  TEXT, $MUNICIPIO_POSTO TEXT, $BAIRRO_POSTO TEXT, $VLRMINTP1_POSTO REAL, $VLRMEDTP1_POSTO REAL, $VLRMAXTP1_POSTO REAL, $VLRUSRTP1_POSTO REAL, $VLRMINTP2_POSTO REAL, $VLRMEDTP2_POSTO REAL, $VLRMAXTP2_POSTO REAL, $VLRUSRTP2_POSTO REAL, $VLRMINTP3_POSTO REAL, $VLRMEDTP3_POSTO REAL, $VLRMAXTP3_POSTO REAL, $VLRUSRTP3_POSTO REAL, $VLRMINTP4_POSTO REAL, $VLRMEDTP4_POSTO REAL, $VLRMAXTP4_POSTO REAL, $VLRUSRTP4_POSTO REAL)")
+        val CREATE_TABLE_QUERY: String = ("CREATE TABLE $NOME_TABELA ($ID_POSTO INTEGER PRIMARY KEY AUTOINCREMENT, $RAZAOSOCIAL_POSTO +  TEXT, $NOMEFANTASIA_POSTO  TEXT, $MUNICIPIO_POSTO TEXT, $BAIRRO_POSTO TEXT, $VLRMINTP1_POSTO REAL, $VLRMEDTP1_POSTO REAL, $VLRMAXTP1_POSTO REAL, $VLRUSRTP1_POSTO REAL, $VLRMINTP2_POSTO REAL, $VLRMEDTP2_POSTO REAL, $VLRMAXTP2_POSTO REAL, $VLRUSRTP2_POSTO REAL, $VLRMINTP3_POSTO REAL, $VLRMEDTP3_POSTO REAL, $VLRMAXTP3_POSTO REAL, $VLRUSRTP3_POSTO REAL, $VLRMINTP4_POSTO REAL, $VLRMEDTP4_POSTO REAL, $VLRMAXTP4_POSTO REAL, $VLRUSRTP4_POSTO REAL)")
         db!!.execSQL(CREATE_TABLE_QUERY);
     }
 
@@ -102,8 +103,60 @@ class DBHelper(context: Context):SQLiteOpenHelper(context, DATABASE_NAME, null, 
                     combustiveis.add(combustivelTipo4)
 
                     val posto = Posto(nomePosto, nomeRzSocial,municipio, endereco, combustiveis)
+                    listaPostos.add(posto)
                 } while(cursor.moveToNext())
             }
             return listaPostos
         }
+
+    fun addPosto(posto: Posto)
+    {
+        val db:SQLiteDatabase = this.writableDatabase
+        val valores = ContentValues()
+        // Nome e endereço
+        valores.put(RAZAOSOCIAL_POSTO, posto.nomeRzSocial)
+        valores.put(NOMEFANTASIA_POSTO, posto.nomePosto)
+        valores.put(MUNICIPIO_POSTO, posto.municipio)
+        valores.put(BAIRRO_POSTO, posto.endereco)
+        // Percorre a lista de categorias de combusível
+        for( i in 1..4)
+        {
+            when(i)
+            {
+                1 -> {
+                    // Valor Diesel
+                    valores.put(VLRMINTP1_POSTO, posto.combustiveis[i].precoMinimo)
+                    valores.put(VLRMEDTP1_POSTO, posto.combustiveis[i].precoMedio)
+                    valores.put(VLRMAXTP1_POSTO, posto.combustiveis[i].precoMaximo)
+                    valores.put(VLRUSRTP1_POSTO, posto.combustiveis[i].precoMaximo)
+                }
+                2 -> {
+                    // Valor Diesel S10
+                    valores.put(VLRMINTP2_POSTO, posto.combustiveis[i].precoMinimo)
+                    valores.put(VLRMEDTP2_POSTO, posto.combustiveis[i].precoMedio)
+                    valores.put(VLRMAXTP2_POSTO, posto.combustiveis[i].precoMaximo)
+                    valores.put(VLRUSRTP2_POSTO, posto.combustiveis[i].precoMaximo)
+                }
+                3 -> {
+                    // Valor Etanol Comum
+                    valores.put(VLRMINTP3_POSTO, posto.combustiveis[i].precoMinimo)
+                    valores.put(VLRMEDTP3_POSTO, posto.combustiveis[i].precoMedio)
+                    valores.put(VLRMAXTP3_POSTO, posto.combustiveis[i].precoMaximo)
+                    valores.put(VLRUSRTP3_POSTO, posto.combustiveis[i].precoMaximo)
+                }
+                4 -> {
+                    // Valor Gasolina Comum
+                    valores.put(VLRMINTP4_POSTO, posto.combustiveis[i].precoMinimo)
+                    valores.put(VLRMEDTP4_POSTO, posto.combustiveis[i].precoMedio)
+                    valores.put(VLRMAXTP4_POSTO, posto.combustiveis[i].precoMaximo)
+                    valores.put(VLRUSRTP4_POSTO, posto.combustiveis[i].precoMaximo)
+                }
+            }
+        }
+        // Insere dados no banco de dados e fecha conexão
+        db.insert(NOME_TABELA, null, valores)
+        db.close()
+
+    }
+
 }
