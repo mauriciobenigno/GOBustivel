@@ -119,33 +119,27 @@ class DBHelper(context: Context):SQLiteOpenHelper(context, DATABASE_NAME, null, 
         valores.put(MUNICIPIO_POSTO, posto.municipio)
         valores.put(BAIRRO_POSTO, posto.endereco)
         // Percorre a lista de categorias de combusível
-        for( i in 1..4)
-        {
-            when(i)
-            {
-                1 -> {
-                    // Valor Diesel
+        for( i in 1..4) {
+            when(i) {
+                1 -> { // Valor Diesel
                     valores.put(VLRMINTP1_POSTO, posto.combustiveis[i].precoMinimo)
                     valores.put(VLRMEDTP1_POSTO, posto.combustiveis[i].precoMedio)
                     valores.put(VLRMAXTP1_POSTO, posto.combustiveis[i].precoMaximo)
                     valores.put(VLRUSRTP1_POSTO, posto.combustiveis[i].precoMaximo)
                 }
-                2 -> {
-                    // Valor Diesel S10
+                2 -> { // Valor Diesel S10
                     valores.put(VLRMINTP2_POSTO, posto.combustiveis[i].precoMinimo)
                     valores.put(VLRMEDTP2_POSTO, posto.combustiveis[i].precoMedio)
                     valores.put(VLRMAXTP2_POSTO, posto.combustiveis[i].precoMaximo)
                     valores.put(VLRUSRTP2_POSTO, posto.combustiveis[i].precoMaximo)
                 }
-                3 -> {
-                    // Valor Etanol Comum
+                3 -> { // Valor Etanol Comum
                     valores.put(VLRMINTP3_POSTO, posto.combustiveis[i].precoMinimo)
                     valores.put(VLRMEDTP3_POSTO, posto.combustiveis[i].precoMedio)
                     valores.put(VLRMAXTP3_POSTO, posto.combustiveis[i].precoMaximo)
                     valores.put(VLRUSRTP3_POSTO, posto.combustiveis[i].precoMaximo)
                 }
-                4 -> {
-                    // Valor Gasolina Comum
+                4 -> { // Valor Gasolina Comum
                     valores.put(VLRMINTP4_POSTO, posto.combustiveis[i].precoMinimo)
                     valores.put(VLRMEDTP4_POSTO, posto.combustiveis[i].precoMedio)
                     valores.put(VLRMAXTP4_POSTO, posto.combustiveis[i].precoMaximo)
@@ -156,7 +150,57 @@ class DBHelper(context: Context):SQLiteOpenHelper(context, DATABASE_NAME, null, 
         // Insere dados no banco de dados e fecha conexão
         db.insert(NOME_TABELA, null, valores)
         db.close()
-
+    }
+    /* Caso algum usuário identifique alguma informação nova sobre o posto, aqui ela pode adicionar as novas informações ao
+    * seu banco de dados locais e posteriormente submeter essa informação para o servidor*/
+    fun atualizaPosto(posto: Posto, idPosto: Int): Int
+    {
+        val db:SQLiteDatabase = this.writableDatabase
+        val valores = ContentValues()
+        // Nome e endereço
+        valores.put(ID_POSTO, idPosto)
+        valores.put(RAZAOSOCIAL_POSTO, posto.nomeRzSocial)
+        valores.put(NOMEFANTASIA_POSTO, posto.nomePosto)
+        valores.put(MUNICIPIO_POSTO, posto.municipio)
+        valores.put(BAIRRO_POSTO, posto.endereco)
+        // Percorre a lista de categorias de combusível
+        for( i in 1..4) {
+            when(i) {
+                1 -> { // Valor Diesel
+                    valores.put(VLRMINTP1_POSTO, posto.combustiveis[i].precoMinimo)
+                    valores.put(VLRMEDTP1_POSTO, posto.combustiveis[i].precoMedio)
+                    valores.put(VLRMAXTP1_POSTO, posto.combustiveis[i].precoMaximo)
+                    valores.put(VLRUSRTP1_POSTO, posto.combustiveis[i].precoMaximo)
+                }
+                2 -> { // Valor Diesel S10
+                    valores.put(VLRMINTP2_POSTO, posto.combustiveis[i].precoMinimo)
+                    valores.put(VLRMEDTP2_POSTO, posto.combustiveis[i].precoMedio)
+                    valores.put(VLRMAXTP2_POSTO, posto.combustiveis[i].precoMaximo)
+                    valores.put(VLRUSRTP2_POSTO, posto.combustiveis[i].precoMaximo)
+                }
+                3 -> { // Valor Etanol Comum
+                    valores.put(VLRMINTP3_POSTO, posto.combustiveis[i].precoMinimo)
+                    valores.put(VLRMEDTP3_POSTO, posto.combustiveis[i].precoMedio)
+                    valores.put(VLRMAXTP3_POSTO, posto.combustiveis[i].precoMaximo)
+                    valores.put(VLRUSRTP3_POSTO, posto.combustiveis[i].precoMaximo)
+                }
+                4 -> { // Valor Gasolina Comum
+                    valores.put(VLRMINTP4_POSTO, posto.combustiveis[i].precoMinimo)
+                    valores.put(VLRMEDTP4_POSTO, posto.combustiveis[i].precoMedio)
+                    valores.put(VLRMAXTP4_POSTO, posto.combustiveis[i].precoMaximo)
+                    valores.put(VLRUSRTP4_POSTO, posto.combustiveis[i].precoMaximo)
+                }
+            }
+        }
+        return db.update(NOME_TABELA, valores, "$ID_POSTO=?", arrayOf(idPosto.toString()))
+    }
+    /* Caso algum usuário notifique que algum posto não existe mais, ela poderá remover de seu banco de dados e reportar
+    * e posteriormente vai poder repostar essa informação ao servidor*/
+    fun deletaPosto(idPosto: Int)
+    {
+        val db:SQLiteDatabase = this.writableDatabase
+        db.delete(NOME_TABELA, "$ID_POSTO=?", arrayOf(idPosto.toString()))
+        db.close()
     }
 
 }
