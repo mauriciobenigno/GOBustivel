@@ -8,13 +8,15 @@ class Combustivel {
     val precoMinimo: Float
     val precoMedio: Float
     val precoMaximo: Float
+    val precoUsuario: Float
 
-    constructor(tipo: Int, precoMinimo: Float, precoMedio: Float, precoMaximo: Float)
+    constructor(tipo: Int, precoMinimo: Float, precoMedio: Float, precoMaximo: Float,precoUsuario: Float)
     {
         this.tipo=tipo
         this.precoMinimo=precoMinimo
         this.precoMedio=precoMedio
         this.precoMaximo=precoMaximo
+        this.precoUsuario = precoUsuario
     }
 
 }
