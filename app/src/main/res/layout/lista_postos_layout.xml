@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <TextView
+            android:text="0 - Autoposto Corujão"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_idnome_posto"
+            android:textSize="25sp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"/>
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <TextView
+                android:text="Gasolina R$4,00 Etanol R$ 2,70 Diesel R$3,25"
+                android:layout_weight="1"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_preco_posto"
+                android:textSize="20sp"/>
+    </LinearLayout>
+</LinearLayout>
