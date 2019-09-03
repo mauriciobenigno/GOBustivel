@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import com.benigno.go_bustivel.TelasTeste.TelaCadastroPosto
 import com.benigno.go_bustivel.TelasTeste.TelaConsultaPosto
+import com.benigno.go_bustivel.View.TelasTeste.TelaExibeMapa
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         var btCadastro = findViewById<Button>(R.id.btCadastro)
         var btExcluir = findViewById<Button>(R.id.btExcluir)
         var btConsultar = findViewById<Button>(R.id.btConsulta)
+        var btAbrirMapa = findViewById<Button>(R.id.btMapa)
 
 
         btCadastro.setOnClickListener {
@@ -32,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         btConsultar.setOnClickListener {
             val intentTelaConsultaPosto = Intent(this, TelaConsultaPosto::class.java)
             startActivity(intentTelaConsultaPosto)
+        }
+
+        btAbrirMapa.setOnClickListener {
+            val intentMapa = Intent(this, TelaExibeMapa::class.java)
         }
     }
 

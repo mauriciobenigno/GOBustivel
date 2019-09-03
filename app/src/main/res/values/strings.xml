@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GO-Bustível</string>
+    <string name="title_activity_tela_exibe_mapa">Map</string>
 </resources>
